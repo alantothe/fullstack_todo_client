@@ -3,11 +3,17 @@ import { createBrowserRouter, RouterProvider} from 'react-router-dom';
 
 import GlobalLayout from "./layout/GlobalLayout";
 import HomePage from "./pages/HomePage";
+import ToDoFormPage from "./pages/ToDoFormPage";
+
+
+const urlEndpoint = process.env.REACT_APP_URL_ENDPOINT;
 
 
 
 const App = () => {
   const [toDoList, setToDoList] = useState([]);
+  const [shouldRefetch, setShouldRefetch] = useState(false);
+
 
   useEffect(() => {
     async function fetchToDoList() {
@@ -22,7 +28,7 @@ const App = () => {
       }
     }
     fetchToDoList();
-  }, []);
+  }, [shouldRefetch]);
 
   const router = createBrowserRouter([
 
@@ -32,9 +38,20 @@ const App = () => {
       children: [
         {
           element: (
-            <HomePage toDoList={toDoList} />
+            <HomePage toDoList={toDoList} setToDoList={setToDoList} urlEndpoint={urlEndpoint} setShouldRefetch={setShouldRefetch} />
           ),
           index: true,
+        },
+        {
+          path: "/todo-form",
+          element:(
+            <ToDoFormPage urlEndpoint={urlEndpoint}  setShouldRefetch={setShouldRefetch}
+
+            />
+          ),
+
+
+
         }
       ]
     }
